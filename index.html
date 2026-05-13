@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COLREGS Rules 1–19 | Exam Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ocean-dark: #040d1a;
+  --ocean-deep: #071426;
+  --ocean-mid: #0a2040;
+  --ocean-surface: #0d3060;
+  --wave: #1a5cb0;
+  --horizon: #2979d4;
+  --gold: #f5c842;
+  --gold-dim: #c9961a;
+  --signal-green: #00e08a;
+  --signal-red: #ff3d5a;
+  --signal-white: #e8f2ff;
+  --fog: #5a7aa8;
+  --text: #c8dff5;
+  --muted: #4e6f99;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--ocean-dark);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── OCEAN BACKGROUND ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(26,92,176,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 10% 80%, rgba(7,20,38,0.9) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 90% 30%, rgba(245,200,66,0.04) 0%, transparent 60%),
+    linear-gradient(180deg, #040d1a 0%, #071426 40%, #0a2040 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Animated waves */
+.waves-bg {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.18;
+  overflow: hidden;
+}
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: -100%;
+  width: 300%;
+  height: 80px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M0,60 C150,100 350,0 600,60 C850,120 1050,20 1200,60 L1200,120 L0,120 Z' fill='%231a5cb0'/%3E%3C/svg%3E") repeat-x;
+  background-size: 600px 80px;
+  animation: waveFlow 12s linear infinite;
+}
+.wave:nth-child(2) {
+  bottom: 10px;
+  height: 60px;
+  opacity: 0.6;
+  animation: waveFlow 8s linear infinite reverse;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath d='M0,60 C200,20 400,100 600,60 C800,20 1000,100 1200,60 L1200,120 L0,120 Z' fill='%230d3060'/%3E%3C/svg%3E");
+  background-size: 600px 60px;
+}
+@keyframes waveFlow {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(33.33%); }
+}
+
+/* Floating particles */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: float linear infinite;
+  opacity: 0;
+}
+@keyframes float {
+  0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+  10% { opacity: 0.4; }
+  90% { opacity: 0.4; }
+  100% { transform: translateY(-20px) translateX(30px); opacity: 0; }
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 16px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 50px 0 36px;
+  text-align: center;
+  position: relative;
+}
+.compass-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+  animation: compassSpin 20s linear infinite;
+  filter: drop-shadow(0 0 16px rgba(245,200,66,0.4));
+}
+@keyframes compassSpin {
+  0%, 40% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
+  60%, 100% { transform: rotate(0deg); }
+}
+.badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 2px;
+}
+.badge-imo { background: var(--wave); color: #fff; }
+.badge-colregs { background: rgba(245,200,66,0.15); color: var(--gold); border: 1px solid rgba(245,200,66,0.3); }
+header h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(36px, 8vw, 64px);
+  font-weight: 800;
+  color: var(--signal-white);
+  letter-spacing: 2px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+header h1 em {
+  color: var(--gold);
+  font-style: normal;
+  text-shadow: 0 0 40px rgba(245,200,66,0.3);
+}
+.header-sub {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 300;
+  margin-top: 10px;
+  letter-spacing: 1px;
+}
+.header-divider {
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 20px auto 0;
+}
+
+/* ── MODE SELECTOR (shown before quiz starts) ── */
+#modeSelector {
+  background: linear-gradient(135deg, var(--ocean-deep), var(--ocean-mid));
+  border: 1px solid rgba(26,92,176,0.4);
+  border-radius: 16px;
+  padding: 36px 28px;
+  margin-bottom: 28px;
+  text-align: center;
+}
+#modeSelector h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--signal-white);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+#modeSelector p { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+
+.config-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.config-block {
+  flex: 1;
+  min-width: 180px;
+  text-align: left;
+}
+.config-block label {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fog);
+  margin-bottom: 8px;
+}
+.config-block select,
+.config-block input[type=range] {
+  width: 100%;
+}
+.config-block select {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px;
+  padding: 10px 14px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a7aa8' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+.config-block select:focus { border-color: var(--horizon); }
+.config-block select option { background: #0a2040; }
+
+.rule-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+.rule-chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.rule-chip.selected {
+  background: rgba(26,92,176,0.3);
+  border-color: var(--horizon);
+  color: var(--signal-white);
+}
+.rule-chip:hover:not(.selected) { border-color: var(--fog); color: var(--text); }
+
+.rule-filter-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fog);
+  margin-bottom: 10px;
+  text-align: left;
+}
+.mode-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.start-btn {
+  flex: 1;
+  min-width: 160px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.start-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background 0.2s;
+}
+.start-btn:hover::after { background: rgba(255,255,255,0.06); }
+.start-btn.exam {
+  background: linear-gradient(135deg, #1a5cb0, #2979d4);
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(26,92,176,0.4);
+}
+.start-btn.study {
+  background: rgba(245,200,66,0.1);
+  border: 1px solid rgba(245,200,66,0.35);
+  color: var(--gold);
+}
+.start-btn:hover { transform: translateY(-2px); }
+.start-btn:active { transform: translateY(0); }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.stat {
+  flex: 1;
+  min-width: 90px;
+  background: var(--ocean-deep);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  padding: 12px 10px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.stat::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+}
+.stat.stat-score::before { background: linear-gradient(90deg, var(--wave), var(--horizon)); }
+.stat.stat-correct::before { background: var(--signal-green); }
+.stat.stat-wrong::before { background: var(--signal-red); }
+.stat.stat-remain::before { background: var(--fog); }
+.stat.stat-timer::before { background: var(--gold); }
+.stat-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--signal-white);
+  line-height: 1;
+}
+.stat-val.green { color: var(--signal-green); }
+.stat-val.red { color: var(--signal-red); }
+.stat-val.gold { color: var(--gold); }
+.stat-val.urgent { color: var(--signal-red); animation: pulse 0.5s infinite; }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+.stat-lbl {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  height: 4px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--wave), var(--horizon), var(--gold));
+  border-radius: 4px;
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* ── QUESTION MAP ── */
+.q-map {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+.q-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: default;
+  transition: all 0.2s;
+  user-select: none;
+}
+.q-dot.clickable { cursor: pointer; }
+.q-dot.clickable:hover { border-color: var(--horizon); color: var(--horizon); }
+.q-dot.answered-correct { background: rgba(0,224,138,0.15); border-color: var(--signal-green); color: var(--signal-green); }
+.q-dot.answered-wrong   { background: rgba(255,61,90,0.15);  border-color: var(--signal-red);   color: var(--signal-red); }
+.q-dot.current          { border-color: var(--gold); color: var(--gold); background: rgba(245,200,66,0.1); }
+
+/* ── TIMER RING ── */
+.timer-ring-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.timer-svg {
+  transform: rotate(-90deg);
+}
+.timer-circle-bg {
+  fill: none;
+  stroke: rgba(255,255,255,0.08);
+  stroke-width: 3;
+}
+.timer-circle {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s linear, stroke 0.3s;
+  stroke-dasharray: 82.47;
+  stroke-dashoffset: 0;
+}
+.timer-circle.warning { stroke: #ff8c00; }
+.timer-circle.danger  { stroke: var(--signal-red); }
+
+/* ── QUESTION CARD ── */
+.question-card {
+  background: linear-gradient(135deg, var(--ocean-deep), var(--ocean-mid));
+  border: 1px solid rgba(26,92,176,0.3);
+  border-radius: 16px;
+  padding: 28px 24px;
+  margin-bottom: 14px;
+  display: none;
+  animation: slideIn 0.3s ease forwards;
+  position: relative;
+  overflow: hidden;
+}
+.question-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--wave), var(--horizon));
+}
+.question-card.active { display: block; }
+.question-card.study-mode::before {
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.q-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.q-num {
+  background: rgba(26,92,176,0.3);
+  color: var(--signal-white);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(26,92,176,0.5);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.q-rule {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background: rgba(245,200,66,0.08);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(245,200,66,0.2);
+}
+.mode-badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-left: auto;
+}
+.mode-badge.exam-badge { background: rgba(26,92,176,0.2); color: var(--horizon); border: 1px solid rgba(26,92,176,0.3); }
+.mode-badge.study-badge { background: rgba(245,200,66,0.1); color: var(--gold); border: 1px solid rgba(245,200,66,0.25); }
+
+.q-text {
+  font-size: 17px;
+  color: var(--signal-white);
+  line-height: 1.65;
+  font-weight: 400;
+  margin-bottom: 22px;
+}
+
+/* ── OPTIONS ── */
+.options { display: flex; flex-direction: column; gap: 9px; }
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1.5px solid rgba(255,255,255,0.07);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.5;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+.option::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0;
+  background: rgba(41,121,212,0.15);
+  transition: width 0.25s;
+}
+.option:hover:not(.disabled)::before { width: 100%; }
+.option:hover:not(.disabled) {
+  border-color: rgba(41,121,212,0.5);
+  color: var(--signal-white);
+}
+.option-letter {
+  min-width: 26px;
+  height: 26px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fog);
+  transition: all 0.2s;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.option:hover:not(.disabled) .option-letter {
+  background: var(--horizon);
+  color: #fff;
+}
+.option-text { position: relative; z-index: 1; }
+.option.correct {
+  background: rgba(0,224,138,0.08);
+  border-color: var(--signal-green);
+  color: var(--signal-white);
+  animation: correctPop 0.4s ease;
+}
+@keyframes correctPop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.015); }
+  100% { transform: scale(1); }
+}
+.option.correct .option-letter { background: var(--signal-green); color: #000; }
+.option.wrong {
+  background: rgba(255,61,90,0.07);
+  border-color: var(--signal-red);
+  color: rgba(200,223,245,0.5);
+  animation: wrongShake 0.4s ease;
+}
+@keyframes wrongShake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.option.wrong .option-letter { background: var(--signal-red); color: #fff; }
+.option.disabled { cursor: default; }
+
+/* ── FEEDBACK ── */
+.feedback {
+  margin-top: 18px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  display: none;
+  animation: fadeUp 0.25s ease;
+}
+.feedback.show { display: block; }
+.feedback.correct-fb {
+  background: rgba(0,224,138,0.07);
+  border: 1px solid rgba(0,224,138,0.25);
+  color: #90f0c8;
+}
+.feedback.wrong-fb {
+  background: rgba(255,61,90,0.07);
+  border: 1px solid rgba(255,61,90,0.25);
+  color: #ffb3be;
+}
+.feedback.timeout-fb {
+  background: rgba(245,200,66,0.07);
+  border: 1px solid rgba(245,200,66,0.25);
+  color: #f5e0a0;
+}
+.feedback strong { color: var(--signal-white); }
+
+/* Study mode: always show feedback */
+.study-explain {
+  margin-top: 14px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  background: rgba(245,200,66,0.06);
+  border: 1px solid rgba(245,200,66,0.2);
+  color: #f5e0a0;
+}
+.study-explain strong { color: var(--gold); }
+
+/* ── NAV BUTTONS ── */
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+.btn {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 9px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--wave), var(--horizon));
+  color: #fff;
+  flex: 1;
+  box-shadow: 0 4px 18px rgba(26,92,176,0.3);
+}
+.btn-primary:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 22px rgba(26,92,176,0.4); }
+.btn-secondary {
+  background: rgba(255,255,255,0.05);
+  color: var(--fog);
+  border: 1px solid rgba(255,255,255,0.09);
+}
+.btn-secondary:hover:not(:disabled) { background: rgba(255,255,255,0.09); color: var(--text); }
+.btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none !important; }
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+  color: #000;
+  font-weight: 800;
+}
+.btn-gold:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+
+/* ── RESULTS ── */
+#results {
+  display: none;
+  animation: fadeUp 0.5s ease;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.results-hero {
+  background: linear-gradient(135deg, var(--ocean-deep), var(--ocean-mid));
+  border: 1px solid rgba(26,92,176,0.3);
+  border-radius: 20px;
+  padding: 44px 28px 36px;
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.results-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--wave), var(--horizon), var(--gold));
+}
+.score-ring-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 24px;
+}
+.score-svg { width: 160px; height: 160px; transform: rotate(-90deg); }
+.score-circle-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 8; }
+.score-circle { fill: none; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 440; stroke-dashoffset: 440; transition: stroke-dashoffset 1.5s cubic-bezier(0.16,1,0.3,1); }
+.score-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.score-pct {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 46px;
+  font-weight: 800;
+  color: var(--signal-white);
+  line-height: 1;
+}
+.score-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.result-grade {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.result-msg {
+  color: var(--fog);
+  font-size: 15px;
+  font-weight: 300;
+  margin-bottom: 8px;
+}
+.result-score-line {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  color: var(--text);
+  letter-spacing: 1px;
+}
+
+/* ── RESULTS ANALYSIS ── */
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.analysis-card {
+  background: var(--ocean-deep);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.analysis-card h4 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.rule-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+.rule-bar-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--fog);
+  min-width: 54px;
+}
+.rule-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.rule-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+.rule-bar-fill.full { background: var(--signal-green); }
+.rule-bar-fill.partial { background: var(--gold); }
+.rule-bar-fill.zero { background: var(--signal-red); width: 10px !important; }
+
+/* ── WRONG LIST ── */
+.wrong-list {
+  background: var(--ocean-deep);
+  border: 1px solid rgba(255,61,90,0.2);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+.wrong-list h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  color: var(--signal-red);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.wrong-item {
+  font-size: 13px;
+  color: rgba(200,223,245,0.65);
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  line-height: 1.5;
+}
+.wrong-item:last-child { border-bottom: none; }
+.wrong-item span { color: var(--gold); font-weight: 600; }
+
+/* ── HISTORY LIST ── */
+.history-list {
+  background: var(--ocean-deep);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+.history-list h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  color: var(--fog);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 13px;
+}
+.history-item:last-child { border-bottom: none; }
+.history-item .h-date { color: var(--muted); font-size: 11px; }
+.history-item .h-score { font-family: 'Barlow Condensed'; font-weight: 700; font-size: 16px; }
+
+.results-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.results-actions .btn { flex: 1; min-width: 140px; padding: 14px; font-size: 15px; }
+
+/* ── SOUND TOGGLE ── */
+.top-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  user-select: none;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.1); }
+.icon-btn.active { background: rgba(245,200,66,0.15); border-color: rgba(245,200,66,0.4); }
+
+/* ── TOOLTIP ── */
+.tooltip-wrap { position: relative; display: inline-block; }
+.tooltip-wrap:hover .tooltip-box { opacity: 1; pointer-events: none; }
+.tooltip-box {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  background: #0d2044;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11px;
+  color: var(--text);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+@media (max-width: 520px) {
+  .q-text { font-size: 15px; }
+  .option { font-size: 13px; }
+  header h1 { font-size: 32px; }
+  .config-row { flex-direction: column; }
+  .results-actions .btn { min-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<div class="waves-bg">
+  <div class="wave"></div>
+  <div class="wave"></div>
+</div>
+<div class="particles" id="particles"></div>
+
+<div class="container">
+
+  <header>
+    <span class="compass-icon">🧭</span>
+    <div class="badge-row">
+      <span class="badge badge-imo">IMO Convention</span>
+      <span class="badge badge-colregs">COLREGS 1972</span>
+    </div>
+    <h1>Rules of the <em>Road</em></h1>
+    <p class="header-sub">International Regulations for Preventing Collisions at Sea</p>
+    <div class="header-divider"></div>
+  </header>
+
+  <!-- MODE SELECTOR -->
+  <div id="modeSelector">
+    <h2>⚓ Configure Your Session</h2>
+    <p>Choose mode, select rules, and start your exam</p>
+
+    <div class="config-row">
+      <div class="config-block">
+        <label>Number of Questions</label>
+        <select id="numQSelect">
+          <option value="10">10 Questions</option>
+          <option value="20">20 Questions</option>
+          <option value="35" selected>All 35 Questions</option>
+        </select>
+      </div>
+      <div class="config-block">
+        <label>Question Order</label>
+        <select id="orderSelect">
+          <option value="original">Original Order</option>
+          <option value="shuffle">Shuffle Questions</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="rule-filter-label">Filter by Rule (toggle to select/deselect)</div>
+    <div class="rule-filter" id="ruleFilter"></div>
+
+    <div class="mode-btns">
+      <button class="start-btn exam" onclick="startQuiz('exam')">🎯 Exam Mode</button>
+      <button class="start-btn study" onclick="startQuiz('study')">📖 Study Mode</button>
+    </div>
+  </div>
+
+  <!-- TOP CONTROLS (shown during quiz) -->
+  <div class="top-controls" id="topControls" style="display:none">
+    <div class="tooltip-wrap">
+      <div class="icon-btn" id="soundBtn" onclick="toggleSound()">🔊</div>
+      <div class="tooltip-box">Toggle Sound</div>
+    </div>
+    <div class="tooltip-wrap">
+      <div class="icon-btn" onclick="backToMenu()">🏠</div>
+      <div class="tooltip-box">Back to Menu</div>
+    </div>
+  </div>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar" id="statsBar" style="display:none">
+    <div class="stat stat-score"><div class="stat-val gold" id="st-score">0%</div><div class="stat-lbl">Score</div></div>
+    <div class="stat stat-correct"><div class="stat-val green" id="st-correct">0</div><div class="stat-lbl">Correct</div></div>
+    <div class="stat stat-wrong"><div class="stat-val red" id="st-wrong">0</div><div class="stat-lbl">Wrong</div></div>
+    <div class="stat stat-remain"><div class="stat-val" id="st-remain">0</div><div class="stat-lbl">Remaining</div></div>
+    <div class="stat stat-timer" id="timerStat">
+      <div class="stat-val gold" id="timerVal">1:00</div>
+      <div class="stat-lbl">Time Left</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap" style="display:none">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- QUESTION MAP -->
+  <div class="q-map" id="qMap" style="display:none"></div>
+
+  <!-- QUIZ AREA -->
+  <div id="quizArea"></div>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="results-hero">
+      <div class="score-ring-wrap">
+        <svg class="score-svg" viewBox="0 0 160 160">
+          <circle class="score-circle-bg" cx="80" cy="80" r="70"/>
+          <circle class="score-circle" cx="80" cy="80" r="70" id="scoreCircle"/>
+        </svg>
+        <div class="score-inner">
+          <div class="score-pct" id="scoreNum">0%</div>
+          <div class="score-label">Score</div>
+        </div>
+      </div>
+      <div class="result-grade" id="resultGrade"></div>
+      <div class="result-msg" id="resultMsg"></div>
+      <div class="result-score-line" id="resultScoreLine"></div>
+    </div>
+
+    <div class="analysis-grid">
+      <div class="analysis-card" id="ruleAnalysis">
+        <h4>📊 Performance by Rule</h4>
+        <div id="ruleChart"></div>
+      </div>
+      <div class="analysis-card">
+        <h4>📈 This Attempt</h4>
+        <div id="attemptStats"></div>
+      </div>
+    </div>
+
+    <div class="wrong-list" id="wrongList" style="display:none">
+      <h3>⚠ Review These Questions</h3>
+      <div id="wrongItems"></div>
+    </div>
+
+    <div class="history-list" id="historyList">
+      <h3>🕐 Past Attempts</h3>
+      <div id="historyItems"></div>
+    </div>
+
+    <div class="results-actions">
+      <button class="btn btn-gold" onclick="restartQuiz()">🔄 Retry Same Config</button>
+      <button class="btn btn-secondary" onclick="backToMenu()">⚙ New Config</button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<footer style="text-align:center;padding:28px 0 14px;color:#2e4a72;font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1;">
+  Made by <span style="color:#f5c842;font-weight:700;">Ahmad Krdaghli</span>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+// QUESTIONS DATA
+// ─────────────────────────────────────────────
+const allQuestions = [
+  { rule:"Rule 1", q:"According to Rule 1, COLREGS apply to:", opts:["Vessels on the high seas only","Vessels on high seas and all connected navigable waters","Only vessels over 50 meters","Only power-driven vessels"], ans:1, exp:"Rule 1(a): These rules apply to all vessels on the high seas AND all waters connected therewith navigable by seagoing vessels." },
+  { rule:"Rule 1", q:"Who may adopt Traffic Separation Schemes under Rule 1?", opts:["The port authority","The flag state government","IMO (International Maritime Organization)","The coastal state only"], ans:2, exp:"Rule 1(d): Traffic separation schemes may be adopted by the Organization (IMO) for the purpose of these Rules." },
+  { rule:"Rule 2", q:"Rule 2 states that nothing in the rules shall:", opts:["Allow vessels to exceed safe speed","Exonerate any vessel from consequences of neglect to comply","Prevent vessels from fishing in shipping lanes","Allow vessels to proceed in restricted visibility"], ans:1, exp:"Rule 2(a): Nothing exonerates any vessel, owner, master or crew from consequences of any neglect to comply with these Rules." },
+  { rule:"Rule 2", q:"A vessel may depart from the COLREGS when:", opts:["The master decides it is inconvenient","Necessary to avoid immediate danger","In congested waters","The vessel is constrained by draught"], ans:1, exp:"Rule 2(b): In construing these Rules, due regard shall be had to special circumstances which may make departure necessary to avoid immediate danger." },
+  { rule:"Rule 3", q:"A vessel 'engaged in fishing' under Rule 3 means a vessel fishing with:", opts:["Any type of fishing gear","Nets, lines or trawls that RESTRICT maneuverability","Trolling lines only","Lines that do not restrict maneuverability"], ans:1, exp:"Rule 3(d): A vessel engaged in fishing means any vessel fishing with nets, lines, trawls or other apparatus which RESTRICTS maneuverability. It does NOT include trolling lines." },
+  { rule:"Rule 3", q:"A 'vessel not under command' (NUC) is one that:", opts:["Has no crew on board","Through some exceptional circumstance is unable to maneuver as required by the rules","Is anchored in a fairway","Has engine failure only"], ans:1, exp:"Rule 3(f): NUC means a vessel which through some exceptional circumstance is unable to maneuver as required by these Rules and is therefore unable to keep out of the way of another vessel." },
+  { rule:"Rule 3", q:"Which of the following is NOT included as a 'vessel restricted in her ability to maneuver' (RAM)?", opts:["A vessel laying a submarine cable","A vessel engaged in dredging","A vessel constrained by her draught","A vessel replenishing another vessel underway"], ans:2, exp:"Rule 3(g): CBD (constrained by draught) is a separate category under Rule 3(h), not RAM. RAM includes cable laying, dredging, replenishment, towing severely, minesweeping, and launching/recovering aircraft." },
+  { rule:"Rule 3", q:"The word 'underway' means the vessel is:", opts:["Moving through the water","Not at anchor, not made fast to shore, and not aground","Making way through the water","Steaming ahead"], ans:1, exp:"Rule 3(i): 'Underway' means that a vessel is not at anchor, or made fast to the shore, or aground. A vessel can be underway but not making way." },
+  { rule:"Rule 3", q:"A 'sailing vessel' under COLREGS is:", opts:["Any vessel with sails fitted","A vessel under sail, provided propelling machinery is not being used","A vessel without an engine","Any vessel not using its engine"], ans:1, exp:"Rule 3(c): A sailing vessel means any vessel under sail provided that propelling machinery, if fitted, is not being used." },
+  { rule:"Rule 4", q:"Rules 5 through 10 (Section 1, Part B) apply in:", opts:["Clear visibility only","Restricted visibility only","Any condition of visibility","Daylight hours only"], ans:2, exp:"Rule 4: Rules in this section apply in ANY condition of visibility." },
+  { rule:"Rule 5", q:"Rule 5 requires every vessel to maintain a proper look-out:", opts:["During hours of darkness only","At all times, by sight and hearing and all available means","Only when in restricted visibility","Only the officer of the watch"], ans:1, exp:"Rule 5: Every vessel shall AT ALL TIMES maintain a proper look-out by sight and hearing as well as by all available means appropriate in the prevailing circumstances." },
+  { rule:"Rule 6", q:"The purpose of maintaining a safe speed is to enable the vessel to:", opts:["Arrive on schedule","Take proper and effective action to avoid collision and stop within appropriate distance","Maintain a comfortable ride","Comply with port regulations"], ans:1, exp:"Rule 6: Every vessel shall proceed at safe speed so that she can take proper and effective action to avoid collision and be stopped within a distance appropriate to prevailing circumstances." },
+  { rule:"Rule 6", q:"Which factor for determining safe speed applies ADDITIONALLY to vessels with operational radar?", opts:["State of visibility","Traffic density","Characteristics, efficiency and limitations of radar equipment","Draft in relation to available depth"], ans:2, exp:"Rule 6(b): Additionally for vessels with operational radar — the characteristics, efficiency and limitations of the radar equipment is a specific factor." },
+  { rule:"Rule 6", q:"The presence of background lights at night is a factor for safe speed because:", opts:["It allows you to go faster","It can mask other vessels' lights or cause confusion","It improves radar performance","It indicates clear weather"], ans:1, exp:"Rule 6(a)(4): At night, background lights such as shore lights or back-scatter from own lights can mask other vessels or make detection more difficult." },
+  { rule:"Rule 7", q:"Under Rule 7, if there is any doubt whether risk of collision exists:", opts:["Wait until the situation becomes clearer","Such risk shall be deemed to exist","Increase speed to assess the situation","Radio the other vessel immediately"], ans:1, exp:"Rule 7(a): If there is any doubt, such risk shall be DEEMED TO EXIST. Always err on the side of caution." },
+  { rule:"Rule 7", q:"Risk of collision is considered to exist if:", opts:["The other vessel is within 2 miles","The compass bearing of an approaching vessel does not appreciably change","The vessels are on reciprocal courses","The other vessel sounds fog signals"], ans:1, exp:"Rule 7(d)(1): Such risk shall be deemed to exist if the compass bearing of an approaching vessel does not appreciably change." },
+  { rule:"Rule 7", q:"When using radar to assess risk of collision, assumptions shall NOT be made on the basis of:", opts:["Long range scanning","Plotting of detected objects","Scanty information, especially scanty radar information","VHF communication"], ans:2, exp:"Rule 7(c): Assumptions shall not be made on the basis of scanty information, especially scanty radar information." },
+  { rule:"Rule 8", q:"Any action taken to avoid collision shall be:", opts:["Taken as late as possible","Positive, made in ample time, with due regard to good seamanship","Small and gradual to avoid disturbing other vessels","Taken only after collision is certain"], ans:1, exp:"Rule 8(a): Any action shall be positive, made in ample time and with due regard to the observance of good seamanship." },
+  { rule:"Rule 8", q:"A succession of small alterations of course and/or speed to avoid collision should be:", opts:["Encouraged as more precise","Avoided","Only used in restricted visibility","Used when approaching head-on"], ans:1, exp:"Rule 8(b): A succession of small alterations of course and/or speed should be AVOIDED." },
+  { rule:"Rule 8", q:"If necessary to avoid collision, a vessel shall:", opts:["Increase speed","Slacken speed, stop, or reverse propulsion","Sound five short blasts only","Alter course to port"], ans:1, exp:"Rule 8(e): If necessary to avoid collision or allow more time, a vessel shall slacken her speed or take all way off by stopping or reversing her means of propulsion." },
+  { rule:"Rule 9", q:"In a narrow channel, a vessel shall keep:", opts:["As close to the port side as possible","As near to the outer limit on the starboard side as safe and practicable","In the middle of the channel","As far from other vessels as possible"], ans:1, exp:"Rule 9(a): A vessel proceeding along a narrow channel shall keep as near to the outer limit on her STARBOARD side as is safe and practicable." },
+  { rule:"Rule 9", q:"In a narrow channel, a vessel engaged in fishing shall:", opts:["Have right of way over all other vessels","Not impede the passage of any other vessel navigating within the channel","Keep to the port side","Anchor and wait for traffic to clear"], ans:1, exp:"Rule 9(c): A vessel engaged in fishing shall not impede the passage of any other vessel navigating within a narrow channel or fairway." },
+  { rule:"Rule 9", q:"A vessel nearing a bend in a narrow channel where other vessels may be obscured shall:", opts:["Stop and wait","Navigate with particular alertness, caution, and sound the appropriate signal (Rule 34e — short blast)","Increase speed to pass quickly","Sound 5 short blasts"], ans:1, exp:"Rule 9(f): Such a vessel shall navigate with particular alertness and caution and shall sound the appropriate signal prescribed in Rule 34(e) — which is one short blast." },
+  { rule:"Rule 10", q:"When using a Traffic Separation Scheme, a vessel shall proceed:", opts:["In any direction that avoids other vessels","In the appropriate lane in the GENERAL DIRECTION of traffic flow for that lane","Against traffic if faster","In the separation zone if space allows"], ans:1, exp:"Rule 10(b)(i): A vessel using a TSS shall proceed in the appropriate traffic lane in the general direction of traffic flow for that lane." },
+  { rule:"Rule 10", q:"If a vessel must cross a Traffic Separation Scheme, she should cross:", opts:["At any convenient angle","At as near right angles as practicable to the general direction of traffic flow","In the same direction as traffic","Only at night"], ans:1, exp:"Rule 10(c): A vessel crossing a TSS shall cross on a heading as nearly as practicable at right angles to the general direction of traffic flow." },
+  { rule:"Rule 10", q:"Which vessels may use the inshore traffic zone?", opts:["All power-driven vessels","Only vessels in distress","Vessels under 20m, sailing vessels, and fishing vessels","Only warships"], ans:2, exp:"Rule 10(d): Vessels of less than 20 meters, sailing vessels and vessels engaged in fishing may use the inshore traffic zone." },
+  { rule:"Rule 11", q:"Rules 12–18 (Section 2, Part B) apply only when:", opts:["Vessels are in any condition of visibility","Vessels are in sight of one another","Visibility is restricted","Vessels are within radar range"], ans:1, exp:"Rule 11: Rules in Section 2 apply to vessels IN SIGHT of one another." },
+  { rule:"Rule 12", q:"Two sailing vessels approach each other, each with wind on a different side. Which shall give way?", opts:["The vessel with the wind on the starboard side","The vessel with the wind on the port side","The smaller vessel","The faster vessel"], ans:1, exp:"Rule 12(a)(i): When each has wind on a different side, the vessel which has the wind on the PORT SIDE shall keep out of the way." },
+  { rule:"Rule 13", q:"A vessel is overtaking another when approaching from a direction more than:", opts:["90° abaft the beam","22.5° abaft the beam","45° abaft the beam","180° (dead astern)"], ans:1, exp:"Rule 13(b): A vessel is overtaking when approaching from a direction more than 22.5° ABAFT THE BEAM — at night she would see only the stern light." },
+  { rule:"Rule 13", q:"Once a vessel is overtaking, her obligations end when:", opts:["She passes the other vessel's beam","She is finally past and clear","The other vessel sounds a signal","She is 0.5 miles ahead"], ans:1, exp:"Rule 13(d): The overtaking vessel must keep clear of the overtaken vessel until she is FINALLY PAST AND CLEAR." },
+  { rule:"Rule 14", q:"In a head-on situation, both power-driven vessels shall:", opts:["Both alter course to port","Both alter course to starboard and pass port-to-port","The slower vessel gives way","The vessel on port side gives way"], ans:1, exp:"Rule 14(a): When two power-driven vessels are meeting head-on, EACH SHALL ALTER course to STARBOARD so that each shall pass on the PORT SIDE of the other." },
+  { rule:"Rule 15", q:"In a crossing situation between two power-driven vessels, the give-way vessel is:", opts:["The vessel on the port side of the other","The vessel which has the other on her starboard side","The slower vessel","The larger vessel"], ans:1, exp:"Rule 15: The vessel which has the other on her own STARBOARD side shall keep out of the way (give-way). The vessel on the port side is the stand-on vessel." },
+  { rule:"Rule 17", q:"The stand-on vessel in a crossing situation, under Rule 17(c), shall NOT:", opts:["Maintain course and speed","Alter course to starboard","Alter course to PORT for a vessel on her own port side","Sound one short blast"], ans:2, exp:"Rule 17(c): A power-driven vessel taking action in a crossing situation shall, if circumstances admit, NOT alter course to PORT for a vessel on her own PORT side." },
+  { rule:"Rule 18", q:"The correct order of priority (from most rights to give way) under Rule 18 is:", opts:["Power → Sail → Fishing → RAM → NUC","NUC → RAM → CBD → Fishing → Sail → Power-Driven","Sail → Fishing → Power → NUC → RAM","CBD → NUC → Fishing → Sail → Power"], ans:1, exp:"Rule 18: The correct hierarchy is NUC → RAM → CBD → Fishing → Sailing → Power-Driven. The least maneuverable vessel has most rights." },
+  { rule:"Rule 19", q:"In restricted visibility, if a vessel detects another vessel by radar only and a risk of collision develops, she shall:", opts:["Sound 5 short blasts","Take avoiding action in ample time","Increase speed and pass quickly","Stop immediately"], ans:1, exp:"Rule 19(d): A vessel which detects by radar the presence of another vessel shall determine if a close-quarters situation is developing and if so, shall take avoiding action in ample time." },
+];
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let questions = [];
+let quizMode = 'exam';
+let current = 0;
+let correct = 0;
+let wrong = 0;
+let answered = [];
+let userAnswers = [];
+let timerInterval = null;
+let timeLeft = 60;
+let soundEnabled = true;
+let selectedRules = [];
+let quizActive = false;
+let lastConfig = {};
+
+// AudioContext for sounds
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTone(freq, dur, type='sine', vol=0.2) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    osc.start(); osc.stop(ctx.currentTime + dur);
+  } catch(e) {}
+}
+function playCorrect() { playTone(880,0.12,'sine',0.18); setTimeout(()=>playTone(1100,0.18,'sine',0.14),90); }
+function playWrong() { playTone(220,0.25,'sawtooth',0.15); }
+function playTimeout() { playTone(440,0.12); setTimeout(()=>playTone(330,0.12),120); setTimeout(()=>playTone(220,0.3),240); }
+function playClick() { playTone(660,0.07,'square',0.1); }
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+function init() {
+  buildParticles();
+  buildRuleFilter();
+  loadHistory();
+}
+
+function buildParticles() {
+  const wrap = document.getElementById('particles');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100 + '%';
+    p.style.animationDuration = (12+Math.random()*18) + 's';
+    p.style.animationDelay = (Math.random()*20) + 's';
+    p.style.width = p.style.height = (1 + Math.random()*2) + 'px';
+    wrap.appendChild(p);
+  }
+}
+
+function buildRuleFilter() {
+  const rules = [...new Set(allQuestions.map(q => q.rule))];
+  selectedRules = [...rules];
+  const wrap = document.getElementById('ruleFilter');
+  wrap.innerHTML = '';
+  const allChip = document.createElement('div');
+  allChip.className = 'rule-chip selected';
+  allChip.textContent = 'All Rules';
+  allChip.onclick = () => toggleAllRules(rules);
+  wrap.appendChild(allChip);
+  rules.forEach(r => {
+    const chip = document.createElement('div');
+    chip.className = 'rule-chip selected';
+    chip.textContent = r;
+    chip.dataset.rule = r;
+    chip.onclick = () => toggleRule(r, chip);
+    wrap.appendChild(chip);
+  });
+}
+
+function toggleAllRules(rules) {
+  const allSelected = selectedRules.length === rules.length;
+  selectedRules = allSelected ? [] : [...rules];
+  document.querySelectorAll('.rule-chip[data-rule]').forEach(c => {
+    c.classList.toggle('selected', !allSelected);
+  });
+  document.querySelector('.rule-chip:not([data-rule])').classList.toggle('selected', !allSelected);
+}
+
+function toggleRule(rule, chip) {
+  const idx = selectedRules.indexOf(rule);
+  if (idx >= 0) selectedRules.splice(idx, 1);
+  else selectedRules.push(rule);
+  chip.classList.toggle('selected', idx < 0);
+  const allRules = [...new Set(allQuestions.map(q => q.rule))];
+  document.querySelector('.rule-chip:not([data-rule])').classList.toggle('selected', selectedRules.length === allRules.length);
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  const btn = document.getElementById('soundBtn');
+  btn.textContent = soundEnabled ? '🔊' : '🔇';
+  btn.classList.toggle('active', soundEnabled);
+}
+
+// ─────────────────────────────────────────────
+// START QUIZ
+// ─────────────────────────────────────────────
+function startQuiz(mode) {
+  if (selectedRules.length === 0) {
+    alert('Please select at least one rule!');
+    return;
+  }
+  playClick();
+  quizMode = mode;
+  const numQ = parseInt(document.getElementById('numQSelect').value);
+  const order = document.getElementById('orderSelect').value;
+
+  let pool = allQuestions.filter(q => selectedRules.includes(q.rule));
+  if (order === 'shuffle') pool = shuffleArray([...pool]);
+  questions = pool.slice(0, Math.min(numQ, pool.length));
+
+  lastConfig = { mode, numQ, order, selectedRules: [...selectedRules] };
+
+  current = 0; correct = 0; wrong = 0;
+  answered = new Array(questions.length).fill(null);
+  userAnswers = new Array(questions.length).fill(-1);
+  quizActive = true;
+
+  document.getElementById('modeSelector').style.display = 'none';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('topControls').style.display = 'flex';
+  document.getElementById('statsBar').style.display = 'flex';
+  document.getElementById('progressWrap').style.display = 'block';
+  document.getElementById('qMap').style.display = 'flex';
+  document.getElementById('quizArea').style.display = 'block';
+
+  // Hide timer in study mode
+  document.getElementById('timerStat').style.display = (mode === 'study') ? 'none' : 'flex';
+
+  buildMap();
+  renderQuestion(0);
+  updateStats();
+  updateProgress();
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function backToMenu() {
+  clearTimer();
+  quizActive = false;
+  document.getElementById('modeSelector').style.display = 'block';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('topControls').style.display = 'none';
+  document.getElementById('statsBar').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('qMap').style.display = 'none';
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('quizArea').innerHTML = '';
+}
+
+// ─────────────────────────────────────────────
+// TIMER
+// ─────────────────────────────────────────────
+function startTimer() {
+  if (quizMode === 'study') return;
+  clearTimer();
+  timeLeft = 60;
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearTimer();
+      onTimeout();
+    }
+  }, 1000);
+}
+
+function clearTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function updateTimerDisplay() {
+  const mins = Math.floor(timeLeft / 60);
+  const secs = timeLeft % 60;
+  const display = mins + ':' + String(secs).padStart(2, '0');
+  const el = document.getElementById('timerVal');
+  if (el) {
+    el.textContent = display;
+    el.className = 'stat-val ' + (timeLeft <= 10 ? 'urgent' : timeLeft <= 20 ? 'red' : 'gold');
+  }
+  // Update ring in card if present
+  const circle = document.querySelector('.timer-circle');
+  if (circle) {
+    const pct = timeLeft / 60;
+    const offset = 82.47 * (1 - pct);
+    circle.style.strokeDashoffset = offset;
+    circle.className = 'timer-circle' + (timeLeft <= 10 ? ' danger' : timeLeft <= 20 ? ' warning' : '');
+  }
+}
+
+function onTimeout() {
+  playTimeout();
+  if (answered[current] !== null) return;
+  answered[current] = 'timeout';
+  wrong++;
+  userAnswers[current] = -1;
+  updateStats();
+  updateMap();
+  renderQuestion(current);
+}
+
+// ─────────────────────────────────────────────
+// QUESTION MAP
+// ─────────────────────────────────────────────
+function buildMap() {
+  const map = document.getElementById('qMap');
+  map.innerHTML = '';
+  questions.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'q-dot' + (i === 0 ? ' current' : '');
+    d.textContent = i + 1;
+    d.id = 'dot-' + i;
+    d.onclick = () => { if (answered[i] !== null || quizMode === 'study') goTo(i); };
+    if (answered[i] !== null || quizMode === 'study') d.classList.add('clickable');
+    map.appendChild(d);
+  });
+}
+
+function updateMap() {
+  questions.forEach((_, i) => {
+    const d = document.getElementById('dot-' + i);
+    if (!d) return;
+    d.className = 'q-dot';
+    if (i === current) d.classList.add('current');
+    const a = answered[i];
+    if (a === 'correct') d.classList.add('answered-correct');
+    if (a === 'wrong' || a === 'timeout') d.classList.add('answered-wrong');
+    if (a !== null || quizMode === 'study') d.classList.add('clickable');
+  });
+}
+
+function goTo(idx) {
+  clearTimer();
+  current = idx;
+  renderQuestion(idx);
+  updateMap();
+  if (answered[idx] === null && quizMode === 'exam') startTimer();
+}
+
+// ─────────────────────────────────────────────
+// RENDER QUESTION
+// ─────────────────────────────────────────────
+function renderQuestion(idx) {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = '';
+  const q = questions[idx];
+  const card = document.createElement('div');
+  card.className = 'question-card active' + (quizMode === 'study' ? ' study-mode' : '');
+
+  const letters = ['A','B','C','D'];
+  const isAnswered = answered[idx] !== null;
+  const isStudy = quizMode === 'study';
+
+  // Timer ring (exam only)
+  const timerHTML = (!isStudy) ? `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+      <div class="timer-ring-wrap">
+        <svg class="timer-svg" width="30" height="30" viewBox="0 0 30 30">
+          <circle class="timer-circle-bg" cx="15" cy="15" r="13.14"/>
+          <circle class="timer-circle${timeLeft<=10?' danger':timeLeft<=20?' warning':''}"
+            cx="15" cy="15" r="13.14"
+            style="stroke-dashoffset:${82.47*(1-timeLeft/60)}"/>
+        </svg>
+      </div>
+    </div>` : '';
+
+  card.innerHTML = `
+    ${timerHTML}
+    <div class="q-header">
+      <div class="q-num">Q${idx+1} / ${questions.length}</div>
+      <div class="q-rule">${q.rule}</div>
+      <div class="mode-badge ${isStudy?'study-badge':'exam-badge'}">${isStudy?'📖 Study':'🎯 Exam'}</div>
+    </div>
+    <div class="q-text">${q.q}</div>
+    <div class="options" id="opts-${idx}">
+      ${q.opts.map((o, i) => {
+        let cls = 'option';
+        if (isAnswered) {
+          cls += ' disabled';
+          if (i === q.ans) cls += ' correct';
+          else if (userAnswers[idx] === i) cls += ' wrong';
+        }
+        return `<button class="${cls}"
+          onclick="selectAnswer(${idx}, ${i})"
+          ${isAnswered ? 'disabled' : ''}>
+          <span class="option-letter">${letters[i]}</span>
+          <span class="option-text">${o}</span>
+        </button>`;
+      }).join('')}
+    </div>
+    ${isStudy ? `<div class="study-explain"><strong>📖 Rule Reference:</strong> ${q.exp}</div>` : ''}
+    <div class="feedback ${isAnswered && !isStudy ? 'show ' + (answered[idx]==='correct'?'correct-fb':answered[idx]==='timeout'?'timeout-fb':'wrong-fb') : ''}" id="fb-${idx}">
+      ${isAnswered && !isStudy ? (
+        answered[idx]==='correct' ? `✅ <strong>Correct!</strong> ${q.exp}` :
+        answered[idx]==='timeout' ? `⏰ <strong>Time's Up!</strong> ${q.exp}` :
+        `❌ <strong>Wrong.</strong> ${q.exp}`
+      ) : ''}
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goTo(${idx-1})" ${idx===0?'disabled':''}>← Prev</button>
+      ${idx < questions.length - 1
+        ? `<button class="btn btn-primary" onclick="goTo(${idx+1})" ${!isAnswered&&!isStudy?'disabled':''}>Next →</button>`
+        : `<button class="btn btn-gold" onclick="showResults()" ${!isAnswered&&!isStudy?'disabled':''} id="finishBtn">
+            Finish ${isStudy?'Study':'Exam'} →
+           </button>`
+      }
+    </div>`;
+
+  area.appendChild(card);
+  updateProgress();
+  if (!isStudy && !isAnswered) startTimer();
+  else clearTimer();
+}
+
+// ─────────────────────────────────────────────
+// SELECT ANSWER
+// ─────────────────────────────────────────────
+function selectAnswer(idx, chosen) {
+  if (answered[idx] !== null) return;
+  clearTimer();
+  const q = questions[idx];
+  userAnswers[idx] = chosen;
+  const isCorrect = chosen === q.ans;
+  answered[idx] = isCorrect ? 'correct' : 'wrong';
+  if (isCorrect) { correct++; playCorrect(); }
+  else { wrong++; playWrong(); }
+  updateStats();
+  updateMap();
+  renderQuestion(idx);
+}
+
+// ─────────────────────────────────────────────
+// STATS / PROGRESS
+// ─────────────────────────────────────────────
+function updateStats() {
+  const done = correct + wrong;
+  const remain = questions.length - done;
+  const pct = questions.length > 0 ? Math.round((correct / questions.length) * 100) : 0;
+  document.getElementById('st-score').textContent = pct + '%';
+  document.getElementById('st-correct').textContent = correct;
+  document.getElementById('st-wrong').textContent = wrong;
+  document.getElementById('st-remain').textContent = remain;
+}
+
+function updateProgress() {
+  const done = answered.filter(a => a !== null).length;
+  const pct = (done / questions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+// ─────────────────────────────────────────────
+// RESULTS
+// ─────────────────────────────────────────────
+function showResults() {
+  clearTimer();
+  quizActive = false;
+
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('qMap').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('statsBar').style.display = 'none';
+  document.getElementById('topControls').style.display = 'none';
+
+  const totalAnswered = quizMode === 'study' ? questions.length : correct + wrong;
+  const pct = Math.round((correct / questions.length) * 100);
+  const res = document.getElementById('results');
+  res.style.display = 'block';
+
+  // Animate score ring
+  const circumference = 2 * Math.PI * 70;
+  const circle = document.getElementById('scoreCircle');
+  const offset = circumference * (1 - pct / 100);
+  circle.style.strokeDasharray = circumference;
+  circle.style.strokeDashoffset = circumference;
+  let color;
+  if (pct >= 90) color = '#00e08a';
+  else if (pct >= 75) color = '#f5c842';
+  else if (pct >= 60) color = '#ff8c00';
+  else color = '#ff3d5a';
+  circle.style.stroke = color;
+  setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
+
+  document.getElementById('scoreNum').textContent = pct + '%';
+
+  let grade, msg;
+  if (pct >= 90) { grade = '🏆 Outstanding'; msg = 'Exceptional knowledge of the Rules of the Road.'; }
+  else if (pct >= 75) { grade = '✅ Competent'; msg = 'Good understanding — review the missed rules.'; }
+  else if (pct >= 60) { grade = '⚠ Marginal'; msg = 'Borderline pass — study more carefully before your exam.'; }
+  else { grade = '❌ Needs Work'; msg = 'Review the COLREGS rules and retake the exam.'; }
+
+  document.getElementById('resultGrade').textContent = grade;
+  document.getElementById('resultGrade').style.color = color;
+  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('resultScoreLine').textContent = `${correct} / ${questions.length} correct · ${pct}%`;
+
+  // Rule analysis chart
+  buildRuleChart();
+
+  // Attempt stats
+  buildAttemptStats(pct);
+
+  // Wrong list (exam mode only)
+  if (quizMode === 'exam') {
+    const wrongQ = questions.filter((_, i) => answered[i] === 'wrong' || answered[i] === 'timeout');
+    const wl = document.getElementById('wrongList');
+    if (wrongQ.length > 0) {
+      wl.style.display = 'block';
+      document.getElementById('wrongItems').innerHTML =
+        wrongQ.map(q => `<div class="wrong-item"><span>${q.rule}:</span> ${q.q}</div>`).join('');
+    } else { wl.style.display = 'none'; }
+  } else {
+    document.getElementById('wrongList').style.display = 'none';
+  }
+
+  // Save to history
+  saveHistory(pct, questions.length, correct);
+  loadHistory();
+}
+
+function buildRuleChart() {
+  const ruleMap = {};
+  questions.forEach((q, i) => {
+    if (!ruleMap[q.rule]) ruleMap[q.rule] = { total: 0, correct: 0 };
+    ruleMap[q.rule].total++;
+    if (answered[i] === 'correct') ruleMap[q.rule].correct++;
+  });
+  const html = Object.entries(ruleMap).map(([rule, data]) => {
+    const pct = Math.round((data.correct / data.total) * 100);
+    const cls = pct === 100 ? 'full' : pct === 0 ? 'zero' : 'partial';
+    return `<div class="rule-bar-row">
+      <div class="rule-bar-label">${rule.replace('Rule ','R')}</div>
+      <div class="rule-bar-track"><div class="rule-bar-fill ${cls}" style="width:${Math.max(pct,5)}%"></div></div>
+      <div style="font-family:'Barlow Condensed';font-size:12px;font-weight:700;color:${cls==='full'?'#00e08a':cls==='zero'?'#ff3d5a':'#f5c842'};min-width:32px;text-align:right">${pct}%</div>
+    </div>`;
+  }).join('');
+  document.getElementById('ruleChart').innerHTML = html;
+}
+
+function buildAttemptStats(pct) {
+  const timeouts = quizMode === 'exam' ? answered.filter(a => a === 'timeout').length : 0;
+  document.getElementById('attemptStats').innerHTML = `
+    <div class="rule-bar-row"><span style="color:var(--fog);font-size:13px">Mode</span><span style="margin-left:auto;font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--signal-white)">${quizMode === 'study' ? '📖 Study' : '🎯 Exam'}</span></div>
+    <div class="rule-bar-row" style="margin-top:8px"><span style="color:var(--fog);font-size:13px">Questions</span><span style="margin-left:auto;font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--signal-white)">${questions.length}</span></div>
+    <div class="rule-bar-row" style="margin-top:8px"><span style="color:var(--fog);font-size:13px">Correct</span><span style="margin-left:auto;font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--signal-green)">${correct}</span></div>
+    <div class="rule-bar-row" style="margin-top:8px"><span style="color:var(--fog);font-size:13px">Wrong</span><span style="margin-left:auto;font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--signal-red)">${wrong}</span></div>
+    ${timeouts > 0 ? `<div class="rule-bar-row" style="margin-top:8px"><span style="color:var(--fog);font-size:13px">Timed Out</span><span style="margin-left:auto;font-family:'Barlow Condensed';font-size:14px;font-weight:700;color:var(--gold)">${timeouts}</span></div>` : ''}
+  `;
+}
+
+// ─────────────────────────────────────────────
+// LOCAL STORAGE HISTORY
+// ─────────────────────────────────────────────
+function saveHistory(pct, total, correct) {
+  let history = JSON.parse(localStorage.getItem('colregs_history') || '[]');
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+  history.unshift({ date: dateStr, pct, total, correct, mode: quizMode });
+  if (history.length > 10) history = history.slice(0, 10);
+  localStorage.setItem('colregs_history', JSON.stringify(history));
+}
+
+function loadHistory() {
+  const history = JSON.parse(localStorage.getItem('colregs_history') || '[]');
+  const wrap = document.getElementById('historyList');
+  const items = document.getElementById('historyItems');
+  if (history.length === 0) {
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = 'block';
+  const colorFor = p => p >= 90 ? '#00e08a' : p >= 75 ? '#f5c842' : p >= 60 ? '#ff8c00' : '#ff3d5a';
+  items.innerHTML = history.map(h =>
+    `<div class="history-item">
+      <span class="h-date">${h.date} · ${h.mode || 'exam'}</span>
+      <span class="h-score" style="color:${colorFor(h.pct)}">${h.pct}% <span style="color:var(--muted);font-size:12px">(${h.correct}/${h.total})</span></span>
+    </div>`
+  ).join('');
+}
+
+// ─────────────────────────────────────────────
+// RESTART
+// ─────────────────────────────────────────────
+function restartQuiz() {
+  clearTimer();
+  // Restore config
+  if (lastConfig.selectedRules) {
+    selectedRules = [...lastConfig.selectedRules];
+  }
+  startQuiz(lastConfig.mode || 'exam');
+}
+
+// ─────────────────────────────────────────────
+// BOOT
+// ─────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
