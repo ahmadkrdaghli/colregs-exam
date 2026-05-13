@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COLREGS Rules 1–19 | Exam Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --deep: #0d2044;
+    --mid: #153268;
+    --accent: #f0a500;
+    --accent2: #e05c00;
+    --green: #00c97a;
+    --red: #ff4059;
+    --light: #e8edf7;
+    --muted: #7a90b8;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--navy);
+    color: var(--light);
+    font-family: 'Source Sans 3', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(21,50,104,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(240,165,0,0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-bottom: 1px solid rgba(240,165,0,0.3);
+    margin-bottom: 30px;
+  }
+  .header-tag {
+    display: inline-block;
+    background: var(--accent2);
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 1px;
+    line-height: 1.1;
+  }
+  header h1 span { color: var(--accent); }
+  header p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: 300;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    flex: 1;
+    min-width: 100px;
+    background: var(--deep);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 12px 16px;
+    text-align: center;
+  }
+  .stat-val {
+    font-family: 'Oswald', sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .stat-lbl {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    height: 6px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--deep);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 28px 24px;
+    margin-bottom: 16px;
+    transition: all 0.3s;
+    display: none;
+    animation: fadeUp 0.35s ease forwards;
+  }
+  .question-card.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .q-num {
+    background: var(--mid);
+    color: var(--accent);
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .q-rule {
+    font-size: 11px;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+  .q-text {
+    font-size: 16px;
+    color: var(--white);
+    line-height: 1.6;
+    font-weight: 400;
+    margin-bottom: 20px;
+  }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 13px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    color: var(--light);
+    line-height: 1.5;
+    text-align: left;
+  }
+  .option:hover:not(.disabled) {
+    background: rgba(240,165,0,0.08);
+    border-color: rgba(240,165,0,0.4);
+    color: var(--white);
+  }
+  .option-letter {
+    min-width: 24px;
+    height: 24px;
+    background: var(--mid);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all 0.2s;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .option:hover:not(.disabled) .option-letter {
+    background: var(--accent);
+    color: var(--navy);
+  }
+  .option.correct {
+    background: rgba(0,201,122,0.1);
+    border-color: var(--green);
+    color: var(--white);
+  }
+  .option.correct .option-letter {
+    background: var(--green);
+    color: var(--navy);
+  }
+  .option.wrong {
+    background: rgba(255,64,89,0.1);
+    border-color: var(--red);
+    color: rgba(255,255,255,0.6);
+  }
+  .option.wrong .option-letter {
+    background: var(--red);
+    color: #fff;
+  }
+  .option.disabled { cursor: default; }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    display: none;
+    animation: fadeUp 0.2s ease;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb {
+    background: rgba(0,201,122,0.1);
+    border: 1px solid rgba(0,201,122,0.3);
+    color: #7fefbe;
+  }
+  .feedback.wrong-fb {
+    background: rgba(255,64,89,0.1);
+    border: 1px solid rgba(255,64,89,0.3);
+    color: #ffb3be;
+  }
+  .feedback strong { color: var(--white); }
+
+  /* NAVIGATION */
+  .nav-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: var(--navy);
+    flex: 1;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-secondary {
+    background: rgba(255,255,255,0.07);
+    color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.12); color: var(--white); }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+  /* RESULTS */
+  #results {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--deep);
+    border-radius: 16px;
+    border: 1px solid rgba(240,165,0,0.2);
+    animation: fadeUp 0.4s ease;
+  }
+  .score-ring {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) 0%, var(--accent) var(--pct), rgba(255,255,255,0.06) var(--pct));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+  .score-ring::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    background: var(--deep);
+    border-radius: 50%;
+  }
+  .score-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--accent);
+    position: relative;
+    z-index: 1;
+  }
+  .result-grade {
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .result-msg {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+  .wrong-list {
+    text-align: left;
+    background: rgba(255,64,89,0.06);
+    border: 1px solid rgba(255,64,89,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+  .wrong-list h3 {
+    font-family: 'Oswald', sans-serif;
+    color: var(--red);
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  .wrong-item {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    line-height: 1.5;
+  }
+  .wrong-item:last-child { border-bottom: none; }
+  .wrong-item span { color: var(--accent); font-weight: 600; }
+
+  /* QUESTION MAP */
+  .q-map {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+    justify-content: center;
+  }
+  .q-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .q-dot:hover { border-color: var(--accent); color: var(--accent); }
+  .q-dot.answered-correct { background: rgba(0,201,122,0.2); border-color: var(--green); color: var(--green); }
+  .q-dot.answered-wrong   { background: rgba(255,64,89,0.2);  border-color: var(--red);   color: var(--red); }
+  .q-dot.current          { border-color: var(--accent); color: var(--accent); background: rgba(240,165,0,0.1); }
+
+  @media (max-width: 480px) {
+    .q-text { font-size: 15px; }
+    .option { font-size: 13px; }
+    header h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="header-tag">COLREGS Exam Practice</div>
+    <h1>Rules of the <span>Road</span></h1>
+    <p>Rules 1–19 · 35 Questions · Select an answer to continue</p>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-val" id="st-score">0</div><div class="stat-lbl">Score</div></div>
+    <div class="stat"><div class="stat-val" id="st-correct">0</div><div class="stat-lbl">Correct</div></div>
+    <div class="stat"><div class="stat-val" id="st-wrong">0</div><div class="stat-lbl">Wrong</div></div>
+    <div class="stat"><div class="stat-val" id="st-remain">35</div><div class="stat-lbl">Remaining</div></div>
+  </div>
+
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <!-- Question Map -->
+  <div class="q-map" id="qMap"></div>
+
+  <!-- Questions injected here -->
+  <div id="quizArea"></div>
+
+  <!-- Results -->
+  <div id="results">
+    <div class="score-ring" id="scoreRing">
+      <div class="score-num" id="scoreNum">0%</div>
+    </div>
+    <div class="result-grade" id="resultGrade"></div>
+    <div class="result-msg" id="resultMsg"></div>
+    <div class="wrong-list" id="wrongList" style="display:none">
+      <h3>⚠ Review These Rules</h3>
+      <div id="wrongItems"></div>
+    </div>
+    <button class="btn btn-primary" onclick="restartQuiz()" style="width:100%;max-width:300px">
+      🔄 Restart Exam
+    </button>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  // Rule 1
+  { rule:"Rule 1", q:"According to Rule 1, COLREGS apply to:",
+    opts:["Vessels on the high seas only","Vessels on high seas and all connected navigable waters","Only vessels over 50 meters","Only power-driven vessels"],
+    ans:1, exp:"Rule 1(a): These rules apply to all vessels on the high seas AND all waters connected therewith navigable by seagoing vessels." },
+
+  { rule:"Rule 1", q:"Who may adopt Traffic Separation Schemes under Rule 1?",
+    opts:["The port authority","The flag state government","IMO (International Maritime Organization)","The coastal state only"],
+    ans:2, exp:"Rule 1(d): Traffic separation schemes may be adopted by the Organization (IMO) for the purpose of these Rules." },
+
+  // Rule 2
+  { rule:"Rule 2", q:"Rule 2 states that nothing in the rules shall:",
+    opts:["Allow vessels to exceed safe speed","Exonerate any vessel from consequences of neglect to comply","Prevent vessels from fishing in shipping lanes","Allow vessels to proceed in restricted visibility"],
+    ans:1, exp:"Rule 2(a): Nothing exonerates any vessel, owner, master or crew from consequences of any neglect to comply with these Rules." },
+
+  { rule:"Rule 2", q:"A vessel may depart from the COLREGS when:",
+    opts:["The master decides it is inconvenient","Necessary to avoid immediate danger","In congested waters","The vessel is constrained by draught"],
+    ans:1, exp:"Rule 2(b): In construing these Rules, due regard shall be had to special circumstances which may make departure necessary to avoid immediate danger." },
+
+  // Rule 3
+  { rule:"Rule 3", q:"A vessel 'engaged in fishing' under Rule 3 means a vessel fishing with:",
+    opts:["Any type of fishing gear","Nets, lines or trawls that RESTRICT maneuverability","Trolling lines only","Lines that do not restrict maneuverability"],
+    ans:1, exp:"Rule 3(d): A vessel engaged in fishing means any vessel fishing with nets, lines, trawls or other apparatus which RESTRICTS maneuverability. It does NOT include trolling lines." },
+
+  { rule:"Rule 3", q:"A 'vessel not under command' (NUC) is one that:",
+    opts:["Has no crew on board","Through some exceptional circumstance is unable to maneuver as required by the rules","Is anchored in a fairway","Has engine failure only"],
+    ans:1, exp:"Rule 3(f): NUC means a vessel which through some exceptional circumstance is unable to maneuver as required by these Rules and is therefore unable to keep out of the way of another vessel." },
+
+  { rule:"Rule 3", q:"Which of the following is NOT included as a 'vessel restricted in her ability to maneuver' (RAM)?",
+    opts:["A vessel laying a submarine cable","A vessel engaged in dredging","A vessel constrained by her draught","A vessel replenishing another vessel underway"],
+    ans:2, exp:"Rule 3(g): CBD (constrained by draught) is a separate category under Rule 3(h), not RAM. RAM includes cable laying, dredging, replenishment, towing severely, minesweeping, and launching/recovering aircraft." },
+
+  { rule:"Rule 3", q:"The word 'underway' means the vessel is:",
+    opts:["Moving through the water","Not at anchor, not made fast to shore, and not aground","Making way through the water","Steaming ahead"],
+    ans:1, exp:"Rule 3(i): 'Underway' means that a vessel is not at anchor, or made fast to the shore, or aground. A vessel can be underway but not making way." },
+
+  { rule:"Rule 3", q:"A 'sailing vessel' under COLREGS is:",
+    opts:["Any vessel with sails fitted","A vessel under sail, provided propelling machinery is not being used","A vessel without an engine","Any vessel not using its engine"],
+    ans:1, exp:"Rule 3(c): A sailing vessel means any vessel under sail provided that propelling machinery, if fitted, is not being used." },
+
+  // Rule 4
+  { rule:"Rule 4", q:"Rules 5 through 10 (Section 1, Part B) apply in:",
+    opts:["Clear visibility only","Restricted visibility only","Any condition of visibility","Daylight hours only"],
+    ans:2, exp:"Rule 4: Rules in this section apply in ANY condition of visibility." },
+
+  // Rule 5
+  { rule:"Rule 5", q:"Rule 5 requires every vessel to maintain a proper look-out:",
+    opts:["During hours of darkness only","At all times, by sight and hearing and all available means","Only when in restricted visibility","Only the officer of the watch"],
+    ans:1, exp:"Rule 5: Every vessel shall AT ALL TIMES maintain a proper look-out by sight and hearing as well as by all available means appropriate in the prevailing circumstances." },
+
+  // Rule 6
+  { rule:"Rule 6", q:"The purpose of maintaining a safe speed is to enable the vessel to:",
+    opts:["Arrive on schedule","Take proper and effective action to avoid collision and stop within appropriate distance","Maintain a comfortable ride","Comply with port regulations"],
+    ans:1, exp:"Rule 6: Every vessel shall proceed at safe speed so that she can take proper and effective action to avoid collision and be stopped within a distance appropriate to prevailing circumstances." },
+
+  { rule:"Rule 6", q:"Which factor for determining safe speed applies ADDITIONALLY to vessels with operational radar?",
+    opts:["State of visibility","Traffic density","Characteristics, efficiency and limitations of radar equipment","Draft in relation to available depth"],
+    ans:2, exp:"Rule 6(b): Additionally for vessels with operational radar — the characteristics, efficiency and limitations of the radar equipment is a specific factor." },
+
+  { rule:"Rule 6", q:"The presence of background lights at night is a factor for safe speed because:",
+    opts:["It allows you to go faster","It can mask other vessels' lights or cause confusion","It improves radar performance","It indicates clear weather"],
+    ans:1, exp:"Rule 6(a)(4): At night, background lights such as shore lights or back-scatter from own lights can mask other vessels or make detection more difficult." },
+
+  // Rule 7
+  { rule:"Rule 7", q:"Under Rule 7, if there is any doubt whether risk of collision exists:",
+    opts:["Wait until the situation becomes clearer","Such risk shall be deemed to exist","Increase speed to assess the situation","Radio the other vessel immediately"],
+    ans:1, exp:"Rule 7(a): If there is any doubt, such risk shall be DEEMED TO EXIST. Always err on the side of caution." },
+
+  { rule:"Rule 7", q:"Risk of collision is considered to exist if:",
+    opts:["The other vessel is within 2 miles","The compass bearing of an approaching vessel does not appreciably change","The vessels are on reciprocal courses","The other vessel sounds fog signals"],
+    ans:1, exp:"Rule 7(d)(1): Such risk shall be deemed to exist if the compass bearing of an approaching vessel does not appreciably change." },
+
+  { rule:"Rule 7", q:"When using radar to assess risk of collision, assumptions shall NOT be made on the basis of:",
+    opts:["Long range scanning","Plotting of detected objects","Scanty information, especially scanty radar information","VHF communication"],
+    ans:2, exp:"Rule 7(c): Assumptions shall not be made on the basis of scanty information, especially scanty radar information." },
+
+  // Rule 8
+  { rule:"Rule 8", q:"Any action taken to avoid collision shall be:",
+    opts:["Taken as late as possible","Positive, made in ample time, with due regard to good seamanship","Small and gradual to avoid disturbing other vessels","Taken only after collision is certain"],
+    ans:1, exp:"Rule 8(a): Any action shall be positive, made in ample time and with due regard to the observance of good seamanship." },
+
+  { rule:"Rule 8", q:"A succession of small alterations of course and/or speed to avoid collision should be:",
+    opts:["Encouraged as more precise","Avoided","Only used in restricted visibility","Used when approaching head-on"],
+    ans:1, exp:"Rule 8(b): A succession of small alterations of course and/or speed should be AVOIDED." },
+
+  { rule:"Rule 8", q:"If necessary to avoid collision, a vessel shall:",
+    opts:["Increase speed","Slacken speed, stop, or reverse propulsion","Sound five short blasts only","Alter course to port"],
+    ans:1, exp:"Rule 8(e): If necessary to avoid collision or allow more time, a vessel shall slacken her speed or take all way off by stopping or reversing her means of propulsion." },
+
+  // Rule 9
+  { rule:"Rule 9", q:"In a narrow channel, a vessel shall keep:",
+    opts:["As close to the port side as possible","As near to the outer limit on the starboard side as safe and practicable","In the middle of the channel","As far from other vessels as possible"],
+    ans:1, exp:"Rule 9(a): A vessel proceeding along a narrow channel shall keep as near to the outer limit on her STARBOARD side as is safe and practicable." },
+
+  { rule:"Rule 9", q:"In a narrow channel, a vessel engaged in fishing shall:",
+    opts:["Have right of way over all other vessels","Not impede the passage of any other vessel navigating within the channel","Keep to the port side","Anchor and wait for traffic to clear"],
+    ans:1, exp:"Rule 9(c): A vessel engaged in fishing shall not impede the passage of any other vessel navigating within a narrow channel or fairway." },
+
+  { rule:"Rule 9", q:"A vessel nearing a bend in a narrow channel where other vessels may be obscured shall:",
+    opts:["Stop and wait","Navigate with particular alertness, caution, and sound the appropriate signal (Rule 34e — short blast)","Increase speed to pass quickly","Sound 5 short blasts"],
+    ans:1, exp:"Rule 9(f): Such a vessel shall navigate with particular alertness and caution and shall sound the appropriate signal prescribed in Rule 34(e) — which is one short blast." },
+
+  // Rule 10
+  { rule:"Rule 10", q:"When using a Traffic Separation Scheme, a vessel shall proceed:",
+    opts:["In any direction that avoids other vessels","In the appropriate lane in the GENERAL DIRECTION of traffic flow for that lane","Against traffic if faster","In the separation zone if space allows"],
+    ans:1, exp:"Rule 10(b)(i): A vessel using a TSS shall proceed in the appropriate traffic lane in the general direction of traffic flow for that lane." },
+
+  { rule:"Rule 10", q:"If a vessel must cross a Traffic Separation Scheme, she should cross:",
+    opts:["At any convenient angle","At as near right angles as practicable to the general direction of traffic flow","In the same direction as traffic","Only at night"],
+    ans:1, exp:"Rule 10(c): A vessel crossing a TSS shall cross on a heading as nearly as practicable at right angles to the general direction of traffic flow." },
+
+  { rule:"Rule 10", q:"Which vessels may use the inshore traffic zone?",
+    opts:["All power-driven vessels","Only vessels in distress","Vessels under 20m, sailing vessels, and fishing vessels","Only warships"],
+    ans:2, exp:"Rule 10(d): Vessels of less than 20 meters, sailing vessels and vessels engaged in fishing may use the inshore traffic zone." },
+
+  // Rule 11
+  { rule:"Rule 11", q:"Rules 12–18 (Section 2, Part B) apply only when:",
+    opts:["Vessels are in any condition of visibility","Vessels are in sight of one another","Visibility is restricted","Vessels are within radar range"],
+    ans:1, exp:"Rule 11: Rules in Section 2 apply to vessels IN SIGHT of one another." },
+
+  // Rule 12
+  { rule:"Rule 12", q:"Two sailing vessels approach each other, each with wind on a different side. Which shall give way?",
+    opts:["The vessel with the wind on the starboard side","The vessel with the wind on the port side","The smaller vessel","The faster vessel"],
+    ans:1, exp:"Rule 12(a)(i): When each has wind on a different side, the vessel which has the wind on the PORT SIDE shall keep out of the way." },
+
+  // Rule 13
+  { rule:"Rule 13", q:"A vessel is overtaking another when approaching from a direction more than:",
+    opts:["90° abaft the beam","22.5° abaft the beam","45° abaft the beam","180° (dead astern)"],
+    ans:1, exp:"Rule 13(b): A vessel is overtaking when approaching from a direction more than 22.5° ABAFT THE BEAM — at night she would see only the stern light." },
+
+  { rule:"Rule 13", q:"Once a vessel is overtaking, her obligations end when:",
+    opts:["She passes the other vessel's beam","She is finally past and clear","The other vessel sounds a signal","She is 0.5 miles ahead"],
+    ans:1, exp:"Rule 13(d): The overtaking vessel must keep clear of the overtaken vessel until she is FINALLY PAST AND CLEAR." },
+
+  // Rule 14
+  { rule:"Rule 14", q:"In a head-on situation, both power-driven vessels shall:",
+    opts:["Both alter course to port","Both alter course to starboard and pass port-to-port","The slower vessel gives way","The vessel on port side gives way"],
+    ans:1, exp:"Rule 14(a): When two power-driven vessels are meeting head-on, EACH SHALL ALTER course to STARBOARD so that each shall pass on the PORT SIDE of the other." },
+
+  // Rule 15
+  { rule:"Rule 15", q:"In a crossing situation between two power-driven vessels, the give-way vessel is:",
+    opts:["The vessel on the port side of the other","The vessel which has the other on her starboard side","The slower vessel","The larger vessel"],
+    ans:1, exp:"Rule 15: The vessel which has the other on her own STARBOARD side shall keep out of the way (give-way). The vessel on the port side is the stand-on vessel." },
+
+  // Rule 17
+  { rule:"Rule 17", q:"The stand-on vessel in a crossing situation, under Rule 17(c), shall NOT:",
+    opts:["Maintain course and speed","Alter course to starboard","Alter course to PORT for a vessel on her own port side","Sound one short blast"],
+    ans:2, exp:"Rule 17(c): A power-driven vessel taking action in a crossing situation shall, if circumstances admit, NOT alter course to PORT for a vessel on her own PORT side." },
+
+  // Rule 18
+  { rule:"Rule 18", q:"The correct order of priority (from most rights to give way) under Rule 18 is:",
+    opts:["Power → Sail → Fishing → RAM → NUC","NUC → RAM → CBD → Fishing → Sail → Power-Driven","Sail → Fishing → Power → NUC → RAM","CBD → NUC → Fishing → Sail → Power"],
+    ans:1, exp:"Rule 18: The correct hierarchy is NUC → RAM → CBD → Fishing → Sailing → Power-Driven. The least maneuverable vessel has most rights." },
+
+  // Rule 19
+  { rule:"Rule 19", q:"In restricted visibility, if a vessel detects another vessel by radar only and a risk of collision develops, she shall:",
+    opts:["Sound 5 short blasts","Take avoiding action in ample time","Increase speed and pass quickly","Stop immediately"],
+    ans:1, exp:"Rule 19(d): A vessel which detects by radar the presence of another vessel shall determine if a close-quarters situation is developing and if so, shall take avoiding action in ample time." },
+];
+
+let current = 0;
+let correct = 0;
+let wrong = 0;
+let answered = new Array(questions.length).fill(null); // null | 'correct' | 'wrong'
+let userAnswers = new Array(questions.length).fill(-1);
+
+function init() {
+  buildMap();
+  renderQuestion(0);
+  updateStats();
+}
+
+function buildMap() {
+  const map = document.getElementById('qMap');
+  map.innerHTML = '';
+  questions.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'q-dot' + (i === 0 ? ' current' : '');
+    d.textContent = i + 1;
+    d.onclick = () => {
+      if (answered[i] !== null) goTo(i);
+    };
+    d.id = 'dot-' + i;
+    map.appendChild(d);
+  });
+}
+
+function updateMap() {
+  questions.forEach((_, i) => {
+    const d = document.getElementById('dot-' + i);
+    d.className = 'q-dot';
+    if (i === current) d.classList.add('current');
+    if (answered[i] === 'correct') d.classList.add('answered-correct');
+    if (answered[i] === 'wrong')   d.classList.add('answered-wrong');
+  });
+}
+
+function goTo(idx) {
+  current = idx;
+  renderQuestion(idx);
+  updateMap();
+}
+
+function renderQuestion(idx) {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = '';
+  const q = questions[idx];
+  const card = document.createElement('div');
+  card.className = 'question-card active';
+  card.id = 'qcard-' + idx;
+
+  const letters = ['A','B','C','D'];
+  const isAnswered = answered[idx] !== null;
+
+  card.innerHTML = `
+    <div class="q-header">
+      <div class="q-num">Q${idx+1} / ${questions.length}</div>
+      <div class="q-rule">${q.rule}</div>
+    </div>
+    <div class="q-text">${q.q}</div>
+    <div class="options" id="opts-${idx}">
+      ${q.opts.map((o, i) => `
+        <button class="option${isAnswered ? ' disabled' : ''}${isAnswered && i === q.ans ? ' correct' : ''}${isAnswered && userAnswers[idx] === i && i !== q.ans ? ' wrong' : ''}"
+          onclick="selectAnswer(${idx}, ${i})"
+          ${isAnswered ? 'disabled' : ''}>
+          <span class="option-letter">${letters[i]}</span>${o}
+        </button>`).join('')}
+    </div>
+    <div class="feedback ${isAnswered ? 'show ' + (answered[idx] === 'correct' ? 'correct-fb' : 'wrong-fb') : ''}" id="fb-${idx}">
+      ${isAnswered ? (answered[idx] === 'correct' ? '✅ <strong>Correct!</strong> ' : '❌ <strong>Wrong.</strong> ') + q.exp : ''}
+    </div>
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" onclick="goTo(${idx-1})" ${idx===0?'disabled':''}>← Prev</button>
+      ${idx < questions.length-1
+        ? `<button class="btn btn-primary" onclick="goTo(${idx+1})" ${!isAnswered?'disabled':''}>Next →</button>`
+        : `<button class="btn btn-primary" onclick="showResults()" ${!isAnswered||correct+wrong<questions.length?'disabled':''} id="finishBtn">Finish Exam</button>`
+      }
+    </div>`;
+
+  area.appendChild(card);
+  updateProgress();
+}
+
+function selectAnswer(idx, chosen) {
+  if (answered[idx] !== null) return;
+  const q = questions[idx];
+  userAnswers[idx] = chosen;
+  const isCorrect = chosen === q.ans;
+  answered[idx] = isCorrect ? 'correct' : 'wrong';
+  if (isCorrect) correct++; else wrong++;
+  updateStats();
+  updateMap();
+  renderQuestion(idx);
+}
+
+function updateStats() {
+  const remain = questions.length - (correct + wrong);
+  document.getElementById('st-score').textContent = Math.round((correct / questions.length) * 100) + '%';
+  document.getElementById('st-correct').textContent = correct;
+  document.getElementById('st-wrong').textContent = wrong;
+  document.getElementById('st-remain').textContent = remain;
+}
+
+function updateProgress() {
+  const pct = ((correct + wrong) / questions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function showResults() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('qMap').style.display = 'none';
+  document.querySelector('.progress-wrap').style.display = 'none';
+
+  const pct = Math.round((correct / questions.length) * 100);
+  const res = document.getElementById('results');
+  res.style.display = 'block';
+
+  const ring = document.getElementById('scoreRing');
+  ring.style.setProperty('--pct', pct + '%');
+  document.getElementById('scoreNum').textContent = pct + '%';
+
+  let grade, msg, color;
+  if (pct >= 90) { grade = '🏆 Excellent!'; msg = 'Outstanding result — you know the rules very well.'; color = '#00c97a'; }
+  else if (pct >= 75) { grade = '✅ Good Pass'; msg = 'Solid understanding. Review the questions you missed.'; color = '#f0a500'; }
+  else if (pct >= 60) { grade = '⚠ Marginal Pass'; msg = 'You passed, but review the rules more carefully before the exam.'; color = '#e05c00'; }
+  else { grade = '❌ Needs Work'; msg = 'Study the rules again and retake the exam. You can do it!'; color = '#ff4059'; }
+
+  const gradeEl = document.getElementById('resultGrade');
+  gradeEl.textContent = grade;
+  gradeEl.style.color = color;
+  document.getElementById('resultMsg').textContent = msg + ` Score: ${correct}/${questions.length}`;
+
+  // Wrong answers list
+  const wrongQ = questions.filter((_, i) => answered[i] === 'wrong');
+  if (wrongQ.length > 0) {
+    const wl = document.getElementById('wrongList');
+    wl.style.display = 'block';
+    document.getElementById('wrongItems').innerHTML =
+      wrongQ.map(q => `<div class="wrong-item"><span>${q.rule}:</span> ${q.q}</div>`).join('');
+  }
+}
+
+function restartQuiz() {
+  current = 0; correct = 0; wrong = 0;
+  answered = new Array(questions.length).fill(null);
+  userAnswers = new Array(questions.length).fill(-1);
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('quizArea').style.display = 'block';
+  document.getElementById('qMap').style.display = 'flex';
+  document.querySelector('.progress-wrap').style.display = 'block';
+  buildMap();
+  renderQuestion(0);
+  updateStats();
+  updateProgress();
+}
+
+init();
+</script>
+
+<footer style="text-align:center;padding:24px 0 10px;color:#7a90b8;font-family:'Source Sans 3',sans-serif;font-size:13px;letter-spacing:0.5px;position:relative;z-index:1;">
+  Made by <span style="color:#f0a500;font-weight:600;">Ahmad Krdaghli</span>
+</footer>
+
+</body>
+</html>
